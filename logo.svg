@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120">
+  <!-- Shadow -->
+  <g transform="translate(4,4)" opacity="0.18">
+    <path d="M8 28 L54 21 L54 62 L8 62 Z" fill="#000"/>
+    <path d="M58 20 L112 12 L112 62 L58 62 Z" fill="#000"/>
+    <path d="M8 66 L54 66 L54 107 L8 100 Z" fill="#000"/>
+    <path d="M58 66 L112 66 L112 108 L58 101 Z" fill="#000"/>
+  </g>
+
+  <!-- Red (top-left) -->
+  <path d="M8 28 L54 21 L54 62 L8 62 Z" fill="#E8192C"/>
+  <!-- Green (top-right) -->
+  <path d="M58 20 L112 12 L112 62 L58 62 Z" fill="#00A651"/>
+  <!-- Blue (bottom-left) -->
+  <path d="M8 66 L54 66 L54 107 L8 100 Z" fill="#0072C6"/>
+  <!-- Yellow (bottom-right) -->
+  <path d="M58 66 L112 66 L112 108 L58 101 Z" fill="#FFB900"/>
+
+  <!-- Highlight shine -->
+  <path d="M8 28 L54 21 L54 26 L10 32 Z" fill="rgba(255,255,255,0.22)"/>
+  <path d="M58 20 L112 12 L112 17 L58 25 Z" fill="rgba(255,255,255,0.22)"/>
+</svg>
