@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState, useCallback } from "react";
 import * as THREE from "three";
+import windowsLogoUrl from "./windows_logo.png";
 
 const CELL = 10, ROWS = 15, COLS = 15, BACKROOMS_IDX = 5;
 
@@ -204,23 +205,6 @@ const WALL_TEXS  = [{label:"Ladrillo",fn:makeBrickWall},{label:"Piedra",fn:makeS
 const FLOOR_TEXS = [{label:"Madera",fn:makeWoodFloor},{label:"Marmol",fn:makeMarbleFloor},{label:"Alfombra",fn:makeCarpetFloor},{label:"Tierra",fn:makeDirtFloor},{label:"Azulejo",fn:makeAzulejoFloor},{label:"Backrooms",fn:makeBackroomsFloor}];
 const CEIL_TEXS  = [{label:"Piedra",fn:makeStoneCeil},{label:"Metal",fn:makeMetalCeil},{label:"Madera",fn:makeWoodCeil},{label:"Ladrillo",fn:makeBrickCeil},{label:"Azulejo",fn:makeAzulejoCeil},{label:"Backrooms",fn:makeBackroomsCeil}];
 
-function makeStartTexture() {
-const W=320,H=160,c=document.createElement("canvas");c.width=W;c.height=H;
-const ctx=c.getContext("2d"); ctx.clearRect(0,0,W,H);
-ctx.fillStyle="rgba(200,200,200,0.13)"; ctx.fillRect(0,0,W,H);
-ctx.strokeStyle="rgba(100,100,100,0.25)"; ctx.lineWidth=1; ctx.strokeRect(1,1,W-2,H-2);
-const lx=12,ly=12,s=56,g=5;
-ctx.fillStyle="#f3632e"; ctx.fillRect(lx,ly,s,s);
-ctx.fillStyle="#66c557"; ctx.fillRect(lx+s+g,ly,s,s);
-ctx.fillStyle="#3d87cf"; ctx.fillRect(lx,ly+s+g,s,s);
-ctx.fillStyle="#fac705"; ctx.fillRect(lx+s+g,ly+s+g,s,s);
-ctx.fillStyle="#000"; ctx.fillRect(lx+s-1,ly,7,s*2+g); ctx.fillRect(lx,ly+s-1,s*2+g,7);
-ctx.fillStyle="rgba(20,20,20,0.6)"; ctx.font="bold 11px Arial"; ctx.fillText("TM",lx+s*2+g+3,ly+10);
-ctx.font="bold italic 78px 'Times New Roman',serif";
-ctx.fillStyle="rgba(25,8,4,0.42)"; ctx.fillText("Start",148,H/2+30);
-ctx.fillStyle="rgba(8,3,1,0.72)"; ctx.fillText("Start",146,H/2+28);
-return new THREE.CanvasTexture(c);
-}
 
 function makeRatTexture() {
 const c=document.createElement("canvas");c.width=64;c.height=64;const ctx=c.getContext("2d");
@@ -631,10 +615,13 @@ return <div style={{display:"flex",alignItems:"center",gap:4}}><TexPreview fn={l
 }
 
 const W98={fontFamily:"MS Sans Serif, Arial",fontSize:11};
-const POS_OPTS=[{v:"tl",l:"Arriba izq"},{v:"tr",l:"Arriba der"},{v:"bl",l:"Abajo izq"},{v:"br",l:"Abajo der"},{v:"center",l:"Centro rotante"}];
+const POS_OPTS=[{v:"tl",l:"Arriba izq"},{v:"tr",l:"Arriba der"},{v:"bl",l:"Abajo izq"},{v:"br",l:"Abajo der"}];
+const MODE_OPTS=[{v:2,l:"Central redondo"},{v:1,l:"En un costado"},{v:0,l:"Sin minimapa"}];
 
-function TextureMenu({ sel, onApply, onClose, mmPos, onMmPos, mmOp, onMmOp, devMode, onFloorClick, floorClickCount, onStraight, onMonster, isMobile }) {
+const MOVE_OPTS=[{v:0,l:"Libre"},{v:1,l:"Carril"},{v:2,l:"Auto"}];
+function TextureMenu({ sel, onApply, onClose, mmMode, onMmMode, mmPos, onMmPos, mmOp, onMmOp, devMode, onFloorClick, floorClickCount, onStraight, onMonster, isMobile, moveMode, onMoveMode }) {
 const [local,setLocal]=useState({...sel});
+const [lMode,setLMode]=useState(mmMode);
 const [lPos,setLPos]=useState(mmPos);
 const [lOp,setLOp]=useState(mmOp);
 const rows=[{key:"ceil",label:"Ceiling\u2026",list:CEIL_TEXS},{key:"wall",label:"Walls\u2026",list:WALL_TEXS},{key:"floor",label:"Floor\u2026",list:FLOOR_TEXS}];
@@ -660,10 +647,19 @@ return (
 {floorClickCount>0&&floorClickCount<10&&<div style={{fontSize:9,color:"#888",marginTop:4,textAlign:"right"}}>{floorClickCount}/10\u2026</div>}
 </fieldset>
 <fieldset style={{border:"1px solid #808080",padding:"8px 10px",marginBottom:8}}>
+<legend style={{fontSize:11,padding:"0 4px"}}>Modo de movimiento</legend>
+<div style={{display:"flex",gap:4,flexWrap:"wrap"}}>
+{MOVE_OPTS.map(({v,l})=><button key={v} onClick={()=>onMoveMode(v)} style={{background:moveMode===v?"#000080":"#d4d0c8",color:moveMode===v?"#fff":"#000",border:moveMode===v?"2px inset #888":"2px outset #fff",padding:"3px 8px",cursor:"pointer",...W98}}>{l}</button>)}
+</div>
+</fieldset>
+<fieldset style={{border:"1px solid #808080",padding:"8px 10px",marginBottom:8}}>
 <legend style={{fontSize:11,padding:"0 4px"}}>Minimap</legend>
 <div style={{display:"flex",gap:4,flexWrap:"wrap",marginBottom:8}}>
-{POS_OPTS.map(({v,l})=><button key={v} onClick={()=>setLPos(v)} style={{background:lPos===v?"#000080":"#d4d0c8",color:lPos===v?"#fff":"#000",border:lPos===v?"2px inset #888":"2px outset #fff",padding:"3px 8px",cursor:"pointer",...W98}}>{l}</button>)}
+{MODE_OPTS.map(({v,l})=><button key={v} onClick={()=>setLMode(v)} style={{background:lMode===v?"#000080":"#d4d0c8",color:lMode===v?"#fff":"#000",border:lMode===v?"2px inset #888":"2px outset #fff",padding:"3px 8px",cursor:"pointer",...W98}}>{l}</button>)}
 </div>
+{lMode===1&&<div style={{display:"flex",gap:4,flexWrap:"wrap",marginBottom:8}}>
+{POS_OPTS.map(({v,l})=><button key={v} onClick={()=>setLPos(v)} style={{background:lPos===v?"#000080":"#d4d0c8",color:lPos===v?"#fff":"#000",border:lPos===v?"2px inset #888":"2px outset #fff",padding:"3px 8px",cursor:"pointer",...W98}}>{l}</button>)}
+</div>}
 <div style={{display:"flex",alignItems:"center",gap:8}}>
 <span style={{...W98,whiteSpace:"nowrap"}}>Traslucido:</span>
 <input type="range" min="0.05" max="1" step="0.05" value={lOp} onChange={e=>setLOp(parseFloat(e.target.value))} style={{flex:1}}/>
@@ -678,10 +674,10 @@ return (
 </fieldset>
 )}
 <div style={{display:"flex",gap:6,justifyContent:"flex-end",marginBottom:6}}>
-<button onClick={()=>{onApply(local);onMmPos(lPos);onMmOp(lOp);onClose();}} style={{background:"#d4d0c8",border:"2px outset #fff",padding:"4px 18px",cursor:"pointer",...W98}}>OK</button>
+<button onClick={()=>{onApply(local);onMmMode(lMode);onMmPos(lPos);onMmOp(lOp);onClose();}} style={{background:"#d4d0c8",border:"2px outset #fff",padding:"4px 18px",cursor:"pointer",...W98}}>OK</button>
 <button onClick={onClose} style={{background:"#d4d0c8",border:"2px outset #fff",padding:"4px 18px",cursor:"pointer",...W98}}>Cancel</button>
 </div>
-<div style={{fontSize:10,color:"#666",textAlign:"center",marginBottom:4}}>M - menu \u00b7 Tab - minimapa</div>
+<div style={{fontSize:10,color:"#666",textAlign:"center",marginBottom:4}}>M - menu \u00b7 Tab - minimapa \u00b7 R - modo movimiento</div>
 {!isMobile&&(
 <div style={{padding:"6px 8px",background:"#c8c4bc",border:"1px inset #888",fontSize:10,color:"#333",lineHeight:1.6}}>
 <strong style={{display:"block",marginBottom:2}}>Teclado</strong>
@@ -731,6 +727,22 @@ const [sel,setSel]=useState({wall:0,floor:0,ceil:0});
 const [devMode,setDevMode]=useState(false);
 const [straight,setStraight]=useState(false);
 const [gameKey,setGameKey]=useState(0);
+const moveModeRef=useRef(0);
+const [moveMode,setMoveModeState]=useState(0);
+const [modeLog,setModeLog]=useState(null);
+const modeLogTimer=useRef(null);
+const railModeRef=useRef(false);
+const [railMode,setRailModeState]=useState(false);
+const autoModeRef=useRef(false);
+const [autoMode,setAutoModeState]=useState(false);
+const toggleAutoRef=useRef(null);
+const railRef=useRef({r:0,c:0,dr:0,dc:1,t:0,targetR:0,targetC:1,phase:'moving',targetYaw:0,pendingDr:0,pendingDc:0,availDirs:[]});
+const railChoiceRef=useRef(null);
+const railChoosingRef=useRef(false);
+const [railChoosing,setRailChoosing]=useState(false);
+const [railAvailSides,setRailAvailSides]=useState([]);
+const toggleRailRef=useRef(null);
+const applyMoveModeRef=useRef(null);
 const floorClicksRef=useRef(0);
 const [floorCount,setFloorCount]=useState(0);
 const handleFloorSecret=()=>{floorClicksRef.current+=1;setFloorCount(floorClicksRef.current);if(floorClicksRef.current>=10){setDevMode(true);floorClicksRef.current=0;setFloorCount(0);}};
@@ -746,6 +758,10 @@ if(isB) setMonster(true); else setMonster(false);
 
 useEffect(()=>{
 const maze=straight?generateStraight():generateMaze(ROWS,COLS);
+const dirToYaw=(dr,dc)=>dr===-1?0:dc===1?Math.PI/2:dr===1?Math.PI:-Math.PI/2;
+const yawToDir=y=>{const a=((y%(2*Math.PI))+2*Math.PI)%(2*Math.PI);if(a<Math.PI/4||a>=7*Math.PI/4)return{dr:-1,dc:0};if(a<3*Math.PI/4)return{dr:0,dc:1};if(a<5*Math.PI/4)return{dr:1,dc:0};return{dr:0,dc:-1};};
+const canGoDir=(r,c,dr,dc)=>{if(dr===-1)return r>0&&!maze.h[r][c];if(dr===1)return r<ROWS-1&&!maze.h[r+1][c];if(dc===-1)return c>0&&!maze.v[r][c];return c<COLS-1&&!maze.v[r][c+1];};
+const relSide=(fdr,fdc,dr,dc)=>{if(dr===fdr&&dc===fdc)return'forward';if(dr===-fdc&&dc===fdr)return'left';if(dr===fdc&&dc===-fdr)return'right';return'back';};
 const scene=new THREE.Scene();scene.background=new THREE.Color(0x000000);scene.fog=new THREE.Fog(0x000000,30,80);
 const camera=new THREE.PerspectiveCamera(70,window.innerWidth/window.innerHeight,0.1,200);
 camera.position.set(CELL*.5,CELL*.5,CELL*.5);camera.rotation.order="YXZ";
@@ -772,8 +788,22 @@ const rat=new THREE.Sprite(new THREE.SpriteMaterial({map:makeRatTexture(),transp
 rat.scale.set(4,4,1);rat.position.set((COLS-1)*CELL+CELL/2,H*.45,ratRow*CELL+CELL/2);scene.add(rat);
 let startYaw=0,spriteDX=0,spriteDZ=-7;
 if(!maze.h[1][0]){startYaw=Math.PI;spriteDZ=7;}else if(!maze.v[0][1]){startYaw=Math.PI/2;spriteDX=7;spriteDZ=0;}
-const startSprite=new THREE.Sprite(new THREE.SpriteMaterial({map:makeStartTexture(),transparent:true,opacity:0.92,depthWrite:false}));
-startSprite.scale.set(7,3.2,1);startSprite.position.set(CELL*.5+spriteDX,CELL*.55,CELL*.5+spriteDZ);scene.add(startSprite);
+const startTex=(()=>{
+  const W=320,H=160,c=document.createElement("canvas");c.width=W;c.height=H;
+  const ctx=c.getContext("2d");
+  ctx.fillStyle="rgba(200,200,200,0.18)";ctx.fillRect(0,0,W,H);
+  ctx.strokeStyle="rgba(120,120,120,0.4)";ctx.lineWidth=2;ctx.strokeRect(1,1,W-2,H-2);
+  ctx.font="bold italic 78px 'Times New Roman',serif";
+  ctx.fillStyle="rgba(25,8,4,0.42)";ctx.fillText("Start",148,H/2+30);
+  ctx.fillStyle="rgba(8,3,1,0.72)";ctx.fillText("Start",146,H/2+28);
+  const tex=new THREE.CanvasTexture(c);
+  const img=new Image();
+  img.onload=()=>{ctx.drawImage(img,8,8,H-16,H-16);tex.needsUpdate=true;};
+  img.src=windowsLogoUrl;
+  return tex;
+})();
+const startSprite=new THREE.Sprite(new THREE.SpriteMaterial({map:startTex,transparent:true,opacity:0.92,depthWrite:false}));
+startSprite.scale.set(7,3.5,1);startSprite.position.set(CELL*.5+spriteDX,CELL*.55,CELL*.5+spriteDZ);scene.add(startSprite);
 
 // Audio
 let audioCtx=null,screamGain=null,screamStarted=false;
@@ -815,9 +845,23 @@ monsterLight.position.copy(monsterSprite.position);
 scene.add(monsterLight);
 
 const keys={};
-const onKD=e=>{keys[e.code]=true;if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.code))e.preventDefault();if(e.code==="Tab"){e.preventDefault();setMode(v=>(v+1)%3);}if(e.code==="KeyM"){e.preventDefault();setMenuOpen(v=>!v);}};
+const onKD=e=>{if(railModeRef.current&&railRef.current.phase==='choosing'){if(e.code==="ArrowLeft"){railChoiceRef.current='left';e.preventDefault();return;}if(e.code==="ArrowRight"){railChoiceRef.current='right';e.preventDefault();return;}if(e.code==="ArrowUp"){railChoiceRef.current='forward';e.preventDefault();return;}}keys[e.code]=true;if(["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.code))e.preventDefault();if(e.code==="Tab"){e.preventDefault();setMode(v=>(v+1)%3);}if(e.code==="KeyM"){e.preventDefault();setMenuOpen(v=>!v);}if(e.code==="KeyR"){e.preventDefault();applyMoveMode((moveModeRef.current+1)%3);}};
 window.addEventListener("keydown",onKD);window.addEventListener("keyup",e=>{keys[e.code]=false;});
 let yaw=startYaw;
+const activateRail=()=>{const r=Math.floor(camera.position.z/CELL),c=Math.floor(camera.position.x/CELL);let{dr,dc}=yawToDir(yaw);if(!canGoDir(r,c,dr,dc)){const v=[{dr:-1,dc:0},{dr:0,dc:1},{dr:1,dc:0},{dr:0,dc:-1}].find(d=>canGoDir(r,c,d.dr,d.dc));if(v){dr=v.dr;dc=v.dc;}}const ty=dirToYaw(dr,dc);railRef.current={r,c,dr,dc,t:0,targetR:r+dr,targetC:c+dc,phase:'moving',targetYaw:ty,pendingDr:dr,pendingDc:dc,availDirs:[]};yaw=ty;};
+const MOVE_LABELS=["Libre","Carril","Auto"];
+const applyMoveMode=(v)=>{
+  if(railChoosingRef.current){railChoosingRef.current=false;setRailChoosing(false);}
+  moveModeRef.current=v;setMoveModeState(v);
+  railModeRef.current=v===1;setRailModeState(v===1);
+  autoModeRef.current=v===2;setAutoModeState(v===2);
+  if(v===1||v===2)activateRail();
+  setModeLog("Modo: "+MOVE_LABELS[v]);
+  clearTimeout(modeLogTimer.current);modeLogTimer.current=setTimeout(()=>setModeLog(null),2500);
+};
+applyMoveModeRef.current=applyMoveMode;
+toggleRailRef.current=()=>applyMoveMode(moveModeRef.current===1?0:1);
+toggleAutoRef.current=()=>applyMoveMode(moveModeRef.current===2?0:2);
 const canMove=(nx,nz)=>{
   const mg=1.5,r=Math.floor(nz/CELL),col=Math.floor(nx/CELL);
   if(r<0||r>=ROWS||col<0||col>=COLS)return false;
@@ -829,16 +873,47 @@ const canMove=(nx,nz)=>{
 let frame;
 const animate=()=>{
   frame=requestAnimationFrame(animate);const spd=0.18;
-  if(keys["ArrowLeft"])yaw-=0.03;if(keys["ArrowRight"])yaw+=0.03;
-  yaw+=touchLook.current.x*.07;
-  const fX=Math.sin(yaw),fZ=-Math.cos(yaw),rX=Math.cos(yaw),rZ=Math.sin(yaw);
-  let nx=camera.position.x,nz=camera.position.z;
-  if(keys["KeyW"]||keys["ArrowUp"]){nx+=fX*spd;nz+=fZ*spd;}if(keys["KeyS"]||keys["ArrowDown"]){nx-=fX*spd;nz-=fZ*spd;}
-  if(keys["KeyA"]){nx-=rX*spd;nz-=rZ*spd;}if(keys["KeyD"]){nx+=rX*spd;nz+=rZ*spd;}
-  const tm=touchMove.current;
-  if(Math.abs(tm.y)>.05){nx+=fX*spd*tm.y*-3.5;nz+=fZ*spd*tm.y*-3.5;}
-  if(Math.abs(tm.x)>.05){nx+=rX*spd*tm.x*3.5;nz+=rZ*spd*tm.x*3.5;}
-  if(canMove(nx,nz)){camera.position.x=nx;camera.position.z=nz;}
+  if(railModeRef.current||autoModeRef.current){
+    const rail=railRef.current;
+    if(rail.phase==='moving'){
+      rail.t+=0.04;
+      if(rail.t>=1){
+        rail.r=rail.targetR;rail.c=rail.targetC;rail.t=0;
+        const bdr=-rail.dr,bdc=-rail.dc;
+        const exits=[{dr:-1,dc:0},{dr:0,dc:1},{dr:1,dc:0},{dr:0,dc:-1}].filter(d=>!(d.dr===bdr&&d.dc===bdc)&&canGoDir(rail.r,rail.c,d.dr,d.dc));
+        if(exits.length===0){rail.pendingDr=bdr;rail.pendingDc=bdc;rail.targetYaw=dirToYaw(bdr,bdc);rail.phase='turning';}
+        else if(exits.length===1){const nd=exits[0];if(nd.dr===rail.dr&&nd.dc===rail.dc){rail.targetR=rail.r+rail.dr;rail.targetC=rail.c+rail.dc;}else{rail.pendingDr=nd.dr;rail.pendingDc=nd.dc;rail.targetYaw=dirToYaw(nd.dr,nd.dc);rail.phase='turning';}}
+        else{rail.availDirs=exits.map(d=>({...d,side:relSide(rail.dr,rail.dc,d.dr,d.dc)}));rail.phase='choosing';if(!railChoosingRef.current){railChoosingRef.current=true;setRailChoosing(true);setRailAvailSides(rail.availDirs.map(d=>d.side));}}
+      }else{const fx=rail.c*CELL+CELL/2,fz=rail.r*CELL+CELL/2,tx=rail.targetC*CELL+CELL/2,tz=rail.targetR*CELL+CELL/2;camera.position.x=fx+(tx-fx)*rail.t;camera.position.z=fz+(tz-fz)*rail.t;}
+    }else if(rail.phase==='turning'){
+      camera.position.x=rail.c*CELL+CELL/2;camera.position.z=rail.r*CELL+CELL/2;
+      let diff=rail.targetYaw-yaw;while(diff>Math.PI)diff-=2*Math.PI;while(diff<-Math.PI)diff+=2*Math.PI;
+      if(Math.abs(diff)<0.01){yaw=rail.targetYaw;rail.dr=rail.pendingDr;rail.dc=rail.pendingDc;rail.targetR=rail.r+rail.dr;rail.targetC=rail.c+rail.dc;rail.phase='moving';rail.t=0;}
+      else{yaw+=Math.sign(diff)*Math.min(0.08,Math.abs(diff));}
+    }else if(rail.phase==='choosing'){
+      camera.position.x=rail.c*CELL+CELL/2;camera.position.z=rail.r*CELL+CELL/2;
+      if(autoModeRef.current){
+        const chosen=rail.availDirs[Math.floor(Math.random()*rail.availDirs.length)];
+        rail.pendingDr=chosen.dr;rail.pendingDc=chosen.dc;
+        if(chosen.dr===rail.dr&&chosen.dc===rail.dc){rail.dr=chosen.dr;rail.dc=chosen.dc;rail.targetR=rail.r+rail.dr;rail.targetC=rail.c+rail.dc;rail.phase='moving';rail.t=0;}
+        else{rail.targetYaw=dirToYaw(chosen.dr,chosen.dc);rail.phase='turning';}
+      }else{
+        const ch=railChoiceRef.current;
+        if(ch){const chosen=rail.availDirs.find(d=>d.side===ch);if(chosen){railChoiceRef.current=null;if(railChoosingRef.current){railChoosingRef.current=false;setRailChoosing(false);}rail.pendingDr=chosen.dr;rail.pendingDc=chosen.dc;if(chosen.dr===rail.dr&&chosen.dc===rail.dc){rail.dr=chosen.dr;rail.dc=chosen.dc;rail.targetR=rail.r+rail.dr;rail.targetC=rail.c+rail.dc;rail.phase='moving';rail.t=0;}else{rail.targetYaw=dirToYaw(chosen.dr,chosen.dc);rail.phase='turning';}}}
+      }
+    }
+  }else{
+    if(keys["ArrowLeft"])yaw-=0.03;if(keys["ArrowRight"])yaw+=0.03;
+    yaw+=touchLook.current.x*.07;
+    const fX=Math.sin(yaw),fZ=-Math.cos(yaw),rX=Math.cos(yaw),rZ=Math.sin(yaw);
+    let nx=camera.position.x,nz=camera.position.z;
+    if(keys["KeyW"]||keys["ArrowUp"]){nx+=fX*spd;nz+=fZ*spd;}if(keys["KeyS"]||keys["ArrowDown"]){nx-=fX*spd;nz-=fZ*spd;}
+    if(keys["KeyA"]){nx-=rX*spd;nz-=rZ*spd;}if(keys["KeyD"]){nx+=rX*spd;nz+=rZ*spd;}
+    const tm=touchMove.current;
+    if(Math.abs(tm.y)>.05){nx+=fX*spd*tm.y*-3.5;nz+=fZ*spd*tm.y*-3.5;}
+    if(Math.abs(tm.x)>.05){nx+=rX*spd*tm.x*3.5;nz+=rZ*spd*tm.x*3.5;}
+    if(canMove(nx,nz)){camera.position.x=nx;camera.position.z=nz;}
+  }
   camera.rotation.y=-yaw;camera.position.y=CELL*.5+Math.sin(Date.now()*.005)*.05;
   startSprite.position.y=CELL*.55+Math.sin(Date.now()*.0015)*.25;
   if(monsterActiveRef.current){
@@ -877,21 +952,19 @@ const animate=()=>{
   visitedRef.current.add(pr+"_"+pc);
   const mc=minimapRef.current;
   if(mc&&mmModeRef.current>0){
-    const isCenter=mmPosRef.current==="center",S=isCenter?14:(mmModeRef.current===2?18:7),VIEW=280;
+    const isCenter=mmModeRef.current===2,S=isCenter?42:21,VIEW=840;
     mc.width=isCenter?VIEW:COLS*S;mc.height=isCenter?VIEW:ROWS*S;
     const mx=mc.getContext("2d");mx.clearRect(0,0,mc.width,mc.height);
     if(isCenter){
-      mx.save();mx.beginPath();mx.arc(VIEW/2,VIEW/2,VIEW/2,0,Math.PI*2);mx.clip();
+      mx.save();
       mx.translate(VIEW/2,VIEW/2);mx.rotate(-yaw);mx.translate(-(pc*S+S/2),-(pr*S+S/2));
-      mx.strokeStyle="rgba(255,220,100,0.95)";mx.lineWidth=2;
+      mx.strokeStyle="rgba(255,255,255,0.95)";mx.lineWidth=2;
       for(const key of visitedRef.current){const[vr,vc]=key.split("_").map(Number),cx2=vc*S,cy2=vr*S;if(maze.h[vr][vc]){mx.beginPath();mx.moveTo(cx2,cy2);mx.lineTo(cx2+S,cy2);mx.stroke();}if(maze.h[vr+1][vc]){mx.beginPath();mx.moveTo(cx2,cy2+S);mx.lineTo(cx2+S,cy2+S);mx.stroke();}if(maze.v[vr][vc]){mx.beginPath();mx.moveTo(cx2,cy2);mx.lineTo(cx2,cy2+S);mx.stroke();}if(maze.v[vr][vc+1]){mx.beginPath();mx.moveTo(cx2+S,cy2);mx.lineTo(cx2+S,cy2+S);mx.stroke();}}
-      mx.restore();mx.fillStyle="#00ffff";mx.beginPath();mx.moveTo(VIEW/2,VIEW/2-9);mx.lineTo(VIEW/2-5,VIEW/2+5);mx.lineTo(VIEW/2+5,VIEW/2+5);mx.closePath();mx.fill();
-      mx.strokeStyle="rgba(255,220,100,0.4)";mx.lineWidth=1.5;mx.beginPath();mx.arc(VIEW/2,VIEW/2,VIEW/2-1,0,Math.PI*2);mx.stroke();
+      mx.restore();mx.fillStyle="#ffffff";mx.beginPath();mx.moveTo(VIEW/2,VIEW/2-9);mx.lineTo(VIEW/2-5,VIEW/2+5);mx.lineTo(VIEW/2+5,VIEW/2+5);mx.closePath();mx.fill();
     }else{
-      mx.strokeStyle="rgba(255,220,100,0.9)";mx.lineWidth=mmModeRef.current===2?2:1.5;
+      mx.strokeStyle="rgba(255,255,255,0.9)";mx.lineWidth=1.5;
       for(const key of visitedRef.current){const[vr,vc]=key.split("_").map(Number),cx2=vc*S,cy2=vr*S;if(maze.h[vr][vc]){mx.beginPath();mx.moveTo(cx2,cy2);mx.lineTo(cx2+S,cy2);mx.stroke();}if(maze.h[vr+1][vc]){mx.beginPath();mx.moveTo(cx2,cy2+S);mx.lineTo(cx2+S,cy2+S);mx.stroke();}if(maze.v[vr][vc]){mx.beginPath();mx.moveTo(cx2,cy2);mx.lineTo(cx2,cy2+S);mx.stroke();}if(maze.v[vr][vc+1]){mx.beginPath();mx.moveTo(cx2+S,cy2);mx.lineTo(cx2+S,cy2+S);mx.stroke();}}
-      const ps=mmModeRef.current===2?5:2.5;mx.fillStyle="#00ffff";mx.beginPath();mx.arc(pc*S+S/2,pr*S+S/2,ps,0,Math.PI*2);mx.fill();
-      mx.strokeStyle="#00ffff";mx.lineWidth=mmModeRef.current===2?2:1.5;mx.beginPath();mx.moveTo(pc*S+S/2,pr*S+S/2);mx.lineTo(pc*S+S/2+Math.sin(yaw)*S*0.8,pr*S+S/2-Math.cos(yaw)*S*0.8);mx.stroke();
+      {const px=pc*S+S/2,py=pr*S+S/2,AL=6,AW=3.5,dx=Math.sin(yaw),dy=-Math.cos(yaw),nx=-dy,ny=dx;mx.fillStyle="#ffffff";mx.beginPath();mx.moveTo(px+dx*AL,py+dy*AL);mx.lineTo(px-dx*AL+nx*AW,py-dy*AL+ny*AW);mx.lineTo(px-dx*AL-nx*AW,py-dy*AL-ny*AW);mx.closePath();mx.fill();}
     }
   }
   renderer.render(scene,camera);
@@ -909,7 +982,8 @@ return ()=>{
 };
 },[straight,gameKey]);
 
-const posStyle=mmPos==="center"?{top:"50%",left:"50%",transform:"translate(-50%,-50%)"}:mmPos==="tl"?{top:60,left:16}:mmPos==="tr"?{top:60,right:16}:mmPos==="bl"?{bottom:80,left:16}:{bottom:80,right:16};
+const effectivePos=mmMode===2?"center":mmPos;
+const posStyle=effectivePos==="center"?{top:"50%",left:"50%",transform:"translate(-50%,-50%)"}:effectivePos==="tl"?{top:60,left:16}:effectivePos==="tr"?{top:60,right:16}:effectivePos==="bl"?{bottom:80,left:16}:{bottom:80,right:16};
 
 return (
 <div style={{position:"relative",width:"100%",height:"100vh",overflow:"hidden",userSelect:"none",background:"#000"}}>
@@ -936,13 +1010,19 @@ ref={el=>{if(!el)return;el.width=512;el.height=640;const ctx2=el.getContext("2d"
 )}
 </div>
 )}
-{menuOpen&&<TextureMenu sel={sel} onApply={setSel} onClose={()=>setMenuOpen(false)} mmPos={mmPos} onMmPos={setPos} mmOp={mmOp} onMmOp={setOp} devMode={devMode} onFloorClick={handleFloorSecret} floorClickCount={floorCount} onStraight={()=>{setStraight(s=>!s);setGameKey(k=>k+1);}} onMonster={()=>setMonster(true)} isMobile={isMobile}/>}
+{menuOpen&&<TextureMenu sel={sel} onApply={setSel} onClose={()=>setMenuOpen(false)} mmMode={mmMode} onMmMode={setMode} mmPos={mmPos} onMmPos={setPos} mmOp={mmOp} onMmOp={setOp} devMode={devMode} onFloorClick={handleFloorSecret} floorClickCount={floorCount} onStraight={()=>{setStraight(s=>!s);setGameKey(k=>k+1);}} onMonster={()=>setMonster(true)} isMobile={isMobile} moveMode={moveMode} onMoveMode={v=>{applyMoveModeRef.current&&applyMoveModeRef.current(v);}}/>}
 {mmMode>0&&(
-<div style={{position:"absolute",lineHeight:0,pointerEvents:"none",borderRadius:mmPos==="center"?"50%":4,...posStyle}}>
-<canvas ref={minimapRef} style={{display:"block",imageRendering:"pixelated",opacity:mmOp,borderRadius:mmPos==="center"?"50%":0}}/>
+<div style={{position:"absolute",lineHeight:0,pointerEvents:"none",borderRadius:4,...posStyle}}>
+<canvas ref={minimapRef} style={{display:"block",imageRendering:"pixelated",opacity:mmOp}}/>
 </div>
 )}
 <button onClick={()=>setMenuOpen(true)} style={{position:"absolute",top:16,left:16,background:"#d4d0c8",color:"#000",border:"2px outset #ffffff",fontFamily:"MS Sans Serif, Arial",fontSize:11,padding:"4px 12px",cursor:"pointer"}}>Menu</button>
+{modeLog&&<div style={{position:"absolute",top:20,left:72,fontFamily:"MS Sans Serif, Arial",fontSize:11,color:"#fff",pointerEvents:"none",textShadow:"1px 1px 2px #000"}}>{modeLog}</div>}
+{railMode&&railChoosing&&<div style={{position:"absolute",bottom:50,left:"50%",transform:"translateX(-50%)",display:"flex",gap:6,pointerEvents:"none"}}>
+{railAvailSides.includes('left')&&<div style={{background:"rgba(0,0,120,0.9)",color:"#fff",border:"2px outset #aaa",padding:"8px 16px",fontFamily:"MS Sans Serif, Arial",fontSize:14}}>← Izq</div>}
+{railAvailSides.includes('forward')&&<div style={{background:"rgba(0,0,120,0.9)",color:"#fff",border:"2px outset #aaa",padding:"8px 16px",fontFamily:"MS Sans Serif, Arial",fontSize:14}}>↑ Recto</div>}
+{railAvailSides.includes('right')&&<div style={{background:"rgba(0,0,120,0.9)",color:"#fff",border:"2px outset #aaa",padding:"8px 16px",fontFamily:"MS Sans Serif, Arial",fontSize:14}}>→ Der</div>}
+</div>}
 </div>
 );
 }
