@@ -6,7 +6,7 @@
 
 **Laberinto 3D en primera persona con estética Windows 98**
 
-[![GitHub Pages](https://img.shields.io/badge/Jugar-GitHub%20Pages-0072C6?style=for-the-badge&logo=github)](https://facundoraulbistolfi.github.io/win98maze)
+[![GitHub Pages](https://img.shields.io/badge/Jugar-GitHub%20Pages-0072C6?style=for-the-badge&logo=github)](https://facundoraulbistolfi.github.io/win98maze/)
 
 </div>
 
