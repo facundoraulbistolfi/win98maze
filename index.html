@@ -1,67 +1,17 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Win98 Maze</title>
-  <link rel="stylesheet" href="style.css" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    html, body { width: 100%; height: 100%; overflow: hidden; background: #000; }
+    #root { width: 100%; height: 100%; }
+  </style>
 </head>
 <body>
-  <!-- Desktop -->
-  <div id="desktop">
-    <!-- Window -->
-    <div id="window" class="window">
-      <div class="title-bar" id="title-bar">
-        <div class="title-bar-text">Win98 Maze</div>
-        <div class="title-bar-controls">
-          <button class="tb-btn minimize" title="Minimize">_</button>
-          <button class="tb-btn maximize" title="Maximize">□</button>
-          <button class="tb-btn close" title="Close" id="btn-close">✕</button>
-        </div>
-      </div>
-      <div class="window-body">
-        <div id="hud">
-          <span>Level: <strong id="level-num">1</strong></span>
-          <span>Steps: <strong id="step-count">0</strong></span>
-          <span>Time: <strong id="timer">0s</strong></span>
-          <button id="btn-new">New Game</button>
-        </div>
-        <canvas id="maze-canvas" width="420" height="420"></canvas>
-        <div id="status-bar">
-          <span id="status-msg">Use arrow keys or WASD to navigate the maze. Find the exit!</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Game Over dialog -->
-    <div id="dialog" class="window dialog hidden">
-      <div class="title-bar">
-        <div class="title-bar-text">Congratulations!</div>
-      </div>
-      <div class="window-body dialog-body">
-        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32'%3E%3Ctext y='26' font-size='28'%3E🏆%3C/text%3E%3C/svg%3E" alt="trophy" width="32" height="32" />
-        <p id="dialog-msg">You escaped the maze!</p>
-        <div class="dialog-buttons">
-          <button id="btn-next">Next Level</button>
-          <button id="btn-quit">Quit</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- Taskbar -->
-    <div id="taskbar">
-      <button id="start-btn">
-        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Crect width='7' height='7' fill='%23f00'/%3E%3Crect x='9' width='7' height='7' fill='%2300f'/%3E%3Crect y='9' width='7' height='7' fill='%23080'/%3E%3Crect x='9' y='9' width='7' height='7' fill='%23ff0'/%3E%3C/svg%3E" alt="start" />
-        Start
-      </button>
-      <div id="taskbar-window">
-        <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16'%3E%3Crect width='16' height='16' rx='2' fill='%23000080'/%3E%3Ctext x='2' y='13' font-size='12' fill='%23fff'%3EM%3C/text%3E%3C/svg%3E" alt="maze" />
-        Win98 Maze
-      </div>
-      <div id="taskbar-clock"></div>
-    </div>
-  </div>
-
-  <script src="maze.js"></script>
+  <div id="root"></div>
+  <script type="module" src="/src/main.jsx"></script>
 </body>
 </html>
