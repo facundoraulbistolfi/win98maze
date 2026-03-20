@@ -201,9 +201,60 @@ for(let row=0;row<W/S;row++){for(let col=0;col<H/S;col++){const lx=col*S+S*0.2,l
 return mktex(c);
 }
 
+function makeCheckerFloor() {
+const W=512,H=512,S=64,c=document.createElement("canvas");c.width=W;c.height=H;
+const ctx=c.getContext("2d");
+for(let r=0;r<W/S;r++)for(let col=0;col<H/S;col++){ctx.fillStyle=(r+col)%2===0?"#111111":"#d8d8d8";ctx.fillRect(col*S,r*S,S,S);}
+return mktex(c);
+}
+function makeWhiteCeil() {
+const W=256,H=256,c=document.createElement("canvas");c.width=W;c.height=H;
+const ctx=c.getContext("2d");ctx.fillStyle="#dddad5";ctx.fillRect(0,0,W,H);
+for(let i=0;i<300;i++){const x=Math.random()*W,y=Math.random()*H,v=(Math.random()*12-6)|0;ctx.fillStyle="rgba("+(210+v)+","+(207+v)+","+(200+v)+",0.25)";ctx.fillRect(x,y,3,3);}
+return mktex(c);
+}
+function makePictureFrame(seed) {
+const W=96,H=72,c=document.createElement("canvas");c.width=W;c.height=H;
+const ctx=c.getContext("2d"),FW=7,px=FW,py=FW,pw=W-FW*2,ph=H-FW*2;
+ctx.fillStyle="#7a5210";ctx.fillRect(0,0,W,H);
+ctx.fillStyle="#b87830";ctx.fillRect(1,1,W-2,4);ctx.fillRect(1,1,4,H-2);
+ctx.fillStyle="#5a3a08";ctx.fillRect(1,H-5,W-2,4);ctx.fillRect(W-5,1,4,H-2);
+const t=seed%5;
+if(t===0){
+  const sky=ctx.createLinearGradient(px,py,px,py+ph*0.55);sky.addColorStop(0,"#4a8fbf");sky.addColorStop(1,"#8dc8e8");ctx.fillStyle=sky;ctx.fillRect(px,py,pw,ph*0.55);
+  ctx.fillStyle="#3a7a3a";ctx.fillRect(px,py+ph*0.55,pw,ph*0.45);ctx.fillStyle="#6ab560";ctx.fillRect(px,py+ph*0.65,pw,ph*0.35);
+  ctx.fillStyle="#ffe050";ctx.beginPath();ctx.arc(px+pw*0.78,py+ph*0.18,ph*0.1,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle="#1a4a1a";ctx.beginPath();ctx.moveTo(px+pw*0.22,py+ph);ctx.lineTo(px+pw*0.18,py+ph*0.52);ctx.lineTo(px+pw*0.26,py+ph*0.52);ctx.closePath();ctx.fill();
+  ctx.fillStyle="#2a5e2a";ctx.beginPath();ctx.moveTo(px+pw*0.22,py+ph*0.58);ctx.lineTo(px+pw*0.15,py+ph*0.3);ctx.lineTo(px+pw*0.29,py+ph*0.3);ctx.closePath();ctx.fill();
+}else if(t===1){
+  ctx.fillStyle="#c0a878";ctx.fillRect(px,py,pw,ph);
+  ctx.fillStyle="#b09060";ctx.beginPath();ctx.ellipse(px+pw/2,py+ph*0.48,pw*0.3,ph*0.38,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle="#2a1808";ctx.beginPath();ctx.ellipse(px+pw/2,py+ph*0.22,pw*0.2,ph*0.12,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle="#2a1808";ctx.beginPath();ctx.arc(px+pw*0.43,py+ph*0.43,1.5,0,Math.PI*2);ctx.fill();ctx.beginPath();ctx.arc(px+pw*0.57,py+ph*0.43,1.5,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle="#8B4513";ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(px+pw/2,py+ph*0.52,pw*0.07,0.1,Math.PI-0.1);ctx.stroke();
+  ctx.fillStyle="#e8e0d0";ctx.fillRect(px+pw*0.37,py+ph*0.75,pw*0.26,ph*0.25);
+}else if(t===2){
+  ctx.fillStyle="#0a0a2a";ctx.fillRect(px,py,pw,ph);ctx.fillStyle="#1a2050";ctx.fillRect(px,py+ph*0.72,pw,ph*0.28);
+  for(let i=0;i<28;i++){const sx=px+((Math.sin(i*127.1)*0.5+0.5)*pw),sy=py+((Math.cos(i*311.7)*0.4+0.22)*ph);ctx.fillStyle="rgba(255,255,220,"+(0.4+Math.sin(i)*0.4)+")";ctx.fillRect(sx,sy,1.5,1.5);}
+  ctx.fillStyle="#ffffaa";ctx.beginPath();ctx.arc(px+pw*0.7,py+ph*0.25,ph*0.1,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle="#0a0a2a";ctx.beginPath();ctx.arc(px+pw*0.73,py+ph*0.22,ph*0.085,0,Math.PI*2);ctx.fill();
+}else if(t===3){
+  ctx.fillStyle="#7a6a50";ctx.fillRect(px,py,pw,ph);ctx.fillStyle="#404030";ctx.fillRect(px,py+ph*0.72,pw,ph*0.28);
+  ctx.fillStyle="#c03020";ctx.beginPath();ctx.ellipse(px+pw/2,py+ph*0.68,pw*0.1,ph*0.2,0,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle="#a02010";ctx.fillRect(px+pw*0.4,py+ph*0.72,pw*0.2,ph*0.04);
+  [["#e84080",0.42],["#f0c000",0.5],["#e06020",0.58]].forEach(([col,fx])=>{ctx.fillStyle=col;ctx.beginPath();ctx.arc(px+pw*fx,py+ph*0.36,pw*0.06,0,Math.PI*2);ctx.fill();ctx.strokeStyle="#2a6020";ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(px+pw*fx,py+ph*0.42);ctx.lineTo(px+pw/2,py+ph*0.6);ctx.stroke();});
+}else{
+  ctx.fillStyle="#f0ead8";ctx.fillRect(px,py,pw,ph);
+  ctx.strokeStyle="#8a7a5a";ctx.lineWidth=1;
+  for(let i=0;i<8;i++){ctx.beginPath();ctx.moveTo(px+Math.sin(i*0.8)*pw*0.4+pw/2,py+ph*0.1);ctx.bezierCurveTo(px+pw*(0.2+i*0.08),py+ph*0.5,px+pw*(0.8-i*0.05),py+ph*0.5,px+pw/2+Math.cos(i*1.2)*pw*0.3,py+ph*0.9);ctx.stroke();}
+  [["#c03030",0.25],["#3060c0",0.42],["#30a030",0.59],["#c0a000",0.76]].forEach(([col,fx])=>{ctx.fillStyle=col+"88";ctx.beginPath();ctx.arc(px+pw*fx,py+ph*(0.3+Math.sin(fx*8)*0.25),pw*0.08,0,Math.PI*2);ctx.fill();});
+}
+return new THREE.CanvasTexture(c);
+}
+
 const WALL_TEXS  = [{label:"Ladrillo",fn:makeBrickWall},{label:"Piedra",fn:makeStoneWall},{label:"Metal",fn:makeMetalWall},{label:"Madera",fn:makeWoodWall},{label:"Azulejo",fn:makeAzulejoWall},{label:"Backrooms",fn:makeBackroomsWall}];
-const FLOOR_TEXS = [{label:"Madera",fn:makeWoodFloor},{label:"Marmol",fn:makeMarbleFloor},{label:"Alfombra",fn:makeCarpetFloor},{label:"Tierra",fn:makeDirtFloor},{label:"Azulejo",fn:makeAzulejoFloor},{label:"Backrooms",fn:makeBackroomsFloor}];
-const CEIL_TEXS  = [{label:"Piedra",fn:makeStoneCeil},{label:"Metal",fn:makeMetalCeil},{label:"Madera",fn:makeWoodCeil},{label:"Ladrillo",fn:makeBrickCeil},{label:"Azulejo",fn:makeAzulejoCeil},{label:"Backrooms",fn:makeBackroomsCeil}];
+const FLOOR_TEXS = [{label:"Madera",fn:makeWoodFloor},{label:"Marmol",fn:makeMarbleFloor},{label:"Alfombra",fn:makeCarpetFloor},{label:"Tierra",fn:makeDirtFloor},{label:"Azulejo",fn:makeAzulejoFloor},{label:"Backrooms",fn:makeBackroomsFloor},{label:"Damero",fn:makeCheckerFloor}];
+const CEIL_TEXS  = [{label:"Piedra",fn:makeStoneCeil},{label:"Metal",fn:makeMetalCeil},{label:"Madera",fn:makeWoodCeil},{label:"Ladrillo",fn:makeBrickCeil},{label:"Azulejo",fn:makeAzulejoCeil},{label:"Backrooms",fn:makeBackroomsCeil},{label:"Blanco",fn:makeWhiteCeil}];
 
 
 function makeRatTexture() {
@@ -723,7 +774,7 @@ const [,setMonsterActive]=useState(false);
 const setMonster=v=>{monsterActiveRef.current=v;setMonsterActive(v);};
 const [won,setWon]=useState(false);
 const [menuOpen,setMenuOpen]=useState(false);
-const [sel,setSel]=useState({wall:0,floor:0,ceil:0});
+const [sel,setSel]=useState({wall:0,floor:6,ceil:6});
 const [devMode,setDevMode]=useState(false);
 const [straight,setStraight]=useState(false);
 const [gameKey,setGameKey]=useState(0);
@@ -746,7 +797,7 @@ const applyMoveModeRef=useRef(null);
 const floorClicksRef=useRef(0);
 const [floorCount,setFloorCount]=useState(0);
 const handleFloorSecret=()=>{floorClicksRef.current+=1;setFloorCount(floorClicksRef.current);if(floorClicksRef.current>=10){setDevMode(true);floorClicksRef.current=0;setFloorCount(0);}};
-const restart=()=>{setWon(false);setMonster(false);setSel({wall:0,floor:0,ceil:0});setMenuOpen(false);visitedRef.current=new Set();setGameKey(k=>k+1);};
+const restart=()=>{setWon(false);setMonster(false);setSel({wall:0,floor:6,ceil:6});setMenuOpen(false);visitedRef.current=new Set();setGameKey(k=>k+1);};
 
 useEffect(()=>{
 if(wallMatRef.current){wallMatRef.current.map=WALL_TEXS[sel.wall].fn();wallMatRef.current.map.needsUpdate=true;wallMatRef.current.needsUpdate=true;}
@@ -783,6 +834,18 @@ const ce=new THREE.Mesh(cGeo,ceilMat);ce.rotation.x=Math.PI/2;ce.position.set(x,
 const wGH=new THREE.PlaneGeometry(CELL,H),wGV=new THREE.PlaneGeometry(CELL,H);
 for(let r=0;r<=ROWS;r++)for(let col=0;col<COLS;col++)if(maze.h[r][col]){const w=new THREE.Mesh(wGH,wallMat);w.position.set(col*CELL+CELL/2,H/2,r*CELL);scene.add(w);const w2=w.clone();w2.rotation.y=Math.PI;scene.add(w2);}
 for(let r=0;r<ROWS;r++)for(let col=0;col<=COLS;col++)if(maze.v[r][col]){const w=new THREE.Mesh(wGV,wallMat);w.rotation.y=Math.PI/2;w.position.set(col*CELL,H/2,r*CELL+CELL/2);scene.add(w);const w2=w.clone();w2.rotation.y=-Math.PI/2;scene.add(w2);}
+// Picture frames on walls (faithful to original Win98 3D Maze screensaver)
+const picGeo=new THREE.PlaneGeometry(CELL*0.46,CELL*0.34);const picMats={};
+const getPicMat=s=>{if(!picMats[s])picMats[s]=new THREE.MeshBasicMaterial({map:makePictureFrame(s)});return picMats[s];};
+const OFF=0.06,PY=CELL*0.52;
+for(let r=0;r<=ROWS;r++)for(let col=0;col<COLS;col++){if(!maze.h[r][col])continue;
+  const h1=(((r*COLS+col)*2654435761)>>>0)%100;if(h1<28){const p=new THREE.Mesh(picGeo,getPicMat(h1%5));p.position.set(col*CELL+CELL/2,PY,r*CELL+OFF);scene.add(p);}
+  const h2=(((r*COLS+col+500)*2654435761)>>>0)%100;if(h2<28){const p=new THREE.Mesh(picGeo,getPicMat(h2%5));p.rotation.y=Math.PI;p.position.set(col*CELL+CELL/2,PY,r*CELL-OFF);scene.add(p);}
+}
+for(let r=0;r<ROWS;r++)for(let col=0;col<=COLS;col++){if(!maze.v[r][col])continue;
+  const h1=(((r*(COLS+1)+col)*3141592653)>>>0)%100;if(h1<28){const p=new THREE.Mesh(picGeo,getPicMat(h1%5));p.rotation.y=Math.PI/2;p.position.set(col*CELL+OFF,PY,r*CELL+CELL/2);scene.add(p);}
+  const h2=(((r*(COLS+1)+col+500)*3141592653)>>>0)%100;if(h2<28){const p=new THREE.Mesh(picGeo,getPicMat(h2%5));p.rotation.y=-Math.PI/2;p.position.set(col*CELL-OFF,PY,r*CELL+CELL/2);scene.add(p);}
+}
 const ratRow=straight?0:ROWS-1;
 const rat=new THREE.Sprite(new THREE.SpriteMaterial({map:makeRatTexture(),transparent:true}));
 rat.scale.set(4,4,1);rat.position.set((COLS-1)*CELL+CELL/2,H*.45,ratRow*CELL+CELL/2);scene.add(rat);
