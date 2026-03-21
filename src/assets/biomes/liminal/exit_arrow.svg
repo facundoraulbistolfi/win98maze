@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="128" viewBox="0 0 320 128">
+  <rect width="320" height="128" rx="10" fill="#31401f"/>
+  <rect x="10" y="10" width="300" height="108" rx="8" fill="#48602e"/>
+  <text x="34" y="76" fill="#eaf4d4" font-family="Arial, sans-serif" font-size="44" font-weight="700">EXIT</text>
+  <path d="M188 64 H270" stroke="#eaf4d4" stroke-width="18" stroke-linecap="round"/>
+  <path d="M240 36 L274 64 L240 92" fill="none" stroke="#eaf4d4" stroke-width="18" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

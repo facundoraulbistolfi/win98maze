@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="160" viewBox="0 0 320 160">
+  <rect width="320" height="160" rx="14" fill="#704520"/>
+  <rect x="10" y="10" width="300" height="140" rx="10" fill="#8a5b2d" stroke="#4d2c13" stroke-width="4"/>
+  <text x="42" y="62" fill="#f0d7b2" font-family="Georgia, serif" font-size="28">Scenic Route</text>
+  <text x="42" y="94" fill="#f0d7b2" font-family="Georgia, serif" font-size="20">Lodge • Gift Shop • Diner</text>
+  <path d="M214 112 L258 80 L214 48" fill="none" stroke="#f0d7b2" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

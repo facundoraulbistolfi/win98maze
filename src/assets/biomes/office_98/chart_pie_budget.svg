@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="240" viewBox="0 0 320 240">
+  <rect width="320" height="240" fill="#eef4f7"/>
+  <rect x="0" y="0" width="320" height="30" fill="#0f6f83"/>
+  <text x="18" y="20" fill="#ffffff" font-family="Arial, sans-serif" font-size="14" font-weight="700">Budget Allocation</text>
+  <g transform="translate(112 128)">
+    <circle r="68" fill="#dde8ec"/>
+    <path d="M0 0 L0 -68 A68 68 0 0 1 66 15 Z" fill="#4f81bd"/>
+    <path d="M0 0 L66 15 A68 68 0 0 1 12 67 Z" fill="#c0504d"/>
+    <path d="M0 0 L12 67 A68 68 0 0 1 -56 39 Z" fill="#9bbb59"/>
+    <path d="M0 0 L-56 39 A68 68 0 0 1 0 -68 Z" fill="#f2af00"/>
+  </g>
+  <g font-family="Arial, sans-serif" font-size="12" fill="#334155">
+    <text x="204" y="82">R&amp;D 31%</text>
+    <text x="204" y="108">Ops 22%</text>
+    <text x="204" y="134">Sales 18%</text>
+    <text x="204" y="160">Support 29%</text>
+  </g>
+</svg>
