@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="220" viewBox="0 0 320 220">
+  <rect width="320" height="220" fill="#ddd7b3"/>
+  <rect x="14" y="14" width="292" height="192" fill="#cfc89c" stroke="#8f8863" stroke-width="3"/>
+  <rect x="34" y="34" width="120" height="64" fill="#f3efdb" transform="rotate(-3 94 66)"/>
+  <rect x="174" y="28" width="106" height="56" fill="#f0ecd2" transform="rotate(2 227 56)"/>
+  <rect x="46" y="118" width="96" height="52" fill="#f3efdb" transform="rotate(1 94 144)"/>
+  <rect x="166" y="108" width="108" height="68" fill="#f3efdb" transform="rotate(-2 220 142)"/>
+  <text x="48" y="58" fill="#4f4a34" font-family="Arial, sans-serif" font-size="16">MEETING MOVED</text>
+  <text x="178" y="54" fill="#4f4a34" font-family="Arial, sans-serif" font-size="16">KEEP WALKING</text>
+  <text x="54" y="146" fill="#4f4a34" font-family="Arial, sans-serif" font-size="14">storage inventory</text>
+  <text x="174" y="138" fill="#4f4a34" font-family="Arial, sans-serif" font-size="14">do not turn lights off</text>
+</svg>

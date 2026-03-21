@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="240" viewBox="0 0 320 240">
+  <rect width="320" height="240" fill="#f7f7f2"/>
+  <rect x="0" y="0" width="320" height="30" fill="#385723"/>
+  <text x="18" y="20" fill="#ffffff" font-family="Arial, sans-serif" font-size="14" font-weight="700">Regional Mix</text>
+  <g transform="translate(108 128)">
+    <circle r="70" fill="#dfe8d8"/>
+    <path d="M0 0 L0 -70 A70 70 0 0 1 62 31 Z" fill="#70ad47"/>
+    <path d="M0 0 L62 31 A70 70 0 0 1 -12 69 Z" fill="#ffc000"/>
+    <path d="M0 0 L-12 69 A70 70 0 1 1 0 -70 Z" fill="#5b9bd5"/>
+    <circle r="28" fill="#f7f7f2"/>
+  </g>
+  <g font-family="Arial, sans-serif" font-size="13" fill="#374151">
+    <rect x="210" y="84" width="14" height="14" fill="#5b9bd5"/>
+    <text x="232" y="96">North 48%</text>
+    <rect x="210" y="114" width="14" height="14" fill="#70ad47"/>
+    <text x="232" y="126">South 27%</text>
+    <rect x="210" y="144" width="14" height="14" fill="#ffc000"/>
+    <text x="232" y="156">West 25%</text>
+  </g>
+</svg>

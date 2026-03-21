@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="220" viewBox="0 0 320 220">
+  <rect width="320" height="220" rx="14" fill="#1e242a"/>
+  <rect x="14" y="14" width="292" height="192" rx="10" fill="#0a1418" stroke="#5f7280" stroke-width="4"/>
+  <path d="M34 150 C70 126 94 122 122 110 S178 70 206 86 S250 118 286 76" fill="none" stroke="#5ef0d2" stroke-width="5"/>
+  <path d="M34 170 L78 170 L104 132 L128 176 L154 116 L180 158 L208 146 L286 146" fill="none" stroke="#78a8ff" stroke-width="4"/>
+  <text x="34" y="42" fill="#d8ebff" font-family="Arial, sans-serif" font-size="20">ENVIRONMENTAL DIAGNOSTICS</text>
+  <text x="34" y="62" fill="#84a7b7" font-family="Arial, sans-serif" font-size="13">live telemetry / wing c</text>
+</svg>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="192" viewBox="0 0 320 192">
+  <rect width="320" height="192" fill="#2e3237"/>
+  <rect x="16" y="16" width="288" height="160" fill="#454b52" stroke="#9099a3" stroke-width="4"/>
+  <path d="M46 144 L96 48 L146 144 Z" fill="#f2c037" stroke="#1d1f21" stroke-width="6"/>
+  <rect x="90" y="82" width="12" height="34" fill="#1d1f21"/>
+  <rect x="90" y="122" width="12" height="12" fill="#1d1f21"/>
+  <text x="170" y="78" fill="#dfe4ea" font-family="Arial, sans-serif" font-size="24" font-weight="700">CAUTION</text>
+  <text x="170" y="108" fill="#c8d0d8" font-family="Arial, sans-serif" font-size="16">maintenance shaft</text>
+  <text x="170" y="132" fill="#c8d0d8" font-family="Arial, sans-serif" font-size="16">authorized staff only</text>
+</svg>

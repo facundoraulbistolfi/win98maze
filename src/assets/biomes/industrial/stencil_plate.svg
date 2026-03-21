@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="256" height="256" viewBox="0 0 256 256">
+  <rect width="256" height="256" rx="16" fill="#4c5259" stroke="#8f98a1" stroke-width="4"/>
+  <circle cx="128" cy="128" r="72" fill="#31363b" stroke="#707a84" stroke-width="8"/>
+  <path d="M128 74 L170 128 L128 182 L86 128 Z" fill="#d7dee7"/>
+  <circle cx="128" cy="128" r="12" fill="#4c5259"/>
+  <text x="62" y="228" fill="#cfd6de" font-family="Arial, sans-serif" font-size="18" letter-spacing="2">SECTOR 04</text>
+</svg>
