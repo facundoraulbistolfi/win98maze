@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="logo.svg" width="96" alt="Windows 98 Logo" />
+<img src="src/windows_logo.png" width="96" alt="Windows 98 Logo" />
 
 # Win98 Maze
 
