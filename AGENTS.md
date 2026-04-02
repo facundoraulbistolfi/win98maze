@@ -12,6 +12,9 @@ This project uses React 18 with Vite and plain `.jsx` files. Prefer functional c
 ## Testing Guidelines
 There is no dedicated test framework configured yet. For now, validate changes with `npm run build` plus manual gameplay checks in `npm run dev`, including keyboard movement, mobile controls if touched, texture selection, and minimap behavior. If you add automated tests later, place them under `src/` and name them `*.test.jsx`.
 
+## Gameplay Invariants
+Preserve the onboarding spawn rule. On every fresh run, the player must start facing an open forward lane rather than a wall, and the floating `Start` logo must be visible from the spawn position. If you touch world generation, spawn camera setup, or the start-sign placement, re-verify that intro vignette in `npm run dev`.
+
 ## Commit & Pull Request Guidelines
 Recent history follows short Conventional Commit prefixes such as `feat:`, `fix:`, and `ci:`. Keep commit subjects imperative and scoped to one change, for example `fix: restore missing maze texture`. Pull requests should include a brief summary, testing notes, and screenshots or short clips for visible gameplay or UI changes. Link the relevant issue when one exists.
 
